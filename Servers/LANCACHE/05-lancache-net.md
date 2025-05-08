@@ -29,16 +29,35 @@ sudo nano .env
 
 ### Key variables to update:
 
-- `LANCACHE_IP`: the IP of this machine (e.g. `192.168.40.2`)
+#### Example `.env` values (adjust as needed):
+
+```
+USE_GENERIC_CACHE=true        # Use monolithic generic cache
+LANCACHE_IP=192.168.222.229   # This is the IP of the server itself
+DNS_BIND_IP=192.168.222.229   # DNS service bind IP on the host
+UPSTREAM_DNS=192.168.222.1     # OpenWRT router IP for upstream DNS
+CACHE_ROOT=/lancache/data      # Path to ZFS cache dataset
+CACHE_DISK_SIZE=900g           # Max cache size (based on ZFS pool)
+MIN_FREE_DISK=10g              # Minimum free space to maintain
+CACHE_INDEX_SIZE=250m          # Index memory size (250m per TB recommended)
+CACHE_MAX_AGE=3650d            # Max age of cached content in days
+TZ=Europe/Prague               # Timezone for container logs
+```
+
+
+- `LANCACHE_IP`: the IP of this machine (e.g. `192.168.1.2`)
 - `CACHE_ROOT`: where cached files go (e.g. `/lancache/data`)
 - `CACHE_DISK_SIZE`: how much space to allow for caching  
   > Set this based on the size of your ZFS pool or disk. For example, if your drive is 1TB, setting `900g` is safe.
-- `UPSTREAM_DNS`: This will be your OpenWRT router's IP (e.g. `192.168.1.1`)  
+- `UPSTREAM_DNS`: This should be your OpenWRT router's IP (e.g. `192.168.1.1`)  
+- `DNS_BIND_IP`: the IP on the host where the DNS server should bind (e.g. `192.168.1.2`)  
+  > Set this if your machine has multiple interfaces—defaults to all interfaces if left blank.
   > This is needed so you can resolve internal names like `pve.lan`
+
 
 Save and close the file when done.
 
-## ▶️ Bring Up LanCache
+## ✅ Check That It's Running
 
 Start it up with Docker Compose:
 
@@ -46,21 +65,13 @@ Start it up with Docker Compose:
 sudo docker compose up -d
 ```
 
-This will start:
-
-- `lancache-dns` – handles DNS redirection
-- `lancache` – the actual caching proxy
-- `sniproxy` – handles HTTPS traffic
-
-## ✅ Check That It's Running
-
-You can verify it's running with:
+Then confirm it's running with:
 
 ```bash
 sudo docker ps
 ```
 
-You should see the three containers up and running.
+You should see `lancache`, `lancache-dns`, and `sniproxy` up and running.
 
 ## 🌐 Configure DHCP DNS in OpenWRT
 
@@ -69,8 +80,23 @@ To ensure all LAN devices use the cache, the OpenWRT router is configured to pus
 For the exact steps, see:  
 [`INFRA/Routers/OpenWRT/04-dhcp-dns-change.md`](../../INFRA/Routers/OpenWRT/04-dhcp-dns-change.md)
 
-This is required to make the cache work seamlessly during the LAN event.
-
 ---
 
-At this point, LanCache is running, properly integrated with the network, and ready to start caching.
+## 🔍 DNS Check on Host (Optional but Useful)
+
+Make sure your server itself uses the correct upstream DNS (i.e. your OpenWRT router) and not itself.
+
+### Check current DNS:
+
+```bash
+cat /etc/resolv.conf
+```
+
+If you see something like:
+
+```
+nameserver 192.168.1.1
+```
+
+Then you're good — that’s your OpenWRT router.
+
