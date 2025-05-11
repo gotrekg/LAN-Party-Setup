@@ -86,16 +86,17 @@ For the exact steps, see:
 
 Make sure your server itself uses the correct upstream DNS (i.e. your OpenWRT router) and not itself.
 
-### Check current DNS:
+### Setup static dns :
 
 ```bash
-cat /etc/resolv.conf
+nano /etc/network/interfaces
 ```
 
-If you see something like:
+add 
 
 ```
-nameserver 192.168.1.1
+iface eth0 inet dhcp
+    dns-nameservers 192.168.1.1
 ```
 
 Then you're good — that’s your OpenWRT router.

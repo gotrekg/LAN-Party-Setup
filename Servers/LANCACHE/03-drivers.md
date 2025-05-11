@@ -84,7 +84,7 @@ chown root:root /lancache/data
 chmod 555 /lancache/data  # Read and execute only
 ```
 
-This prevents anything (like someone’s cheap antivirus) from accidentally deleting files in the cache.
+This prevents anything (like someone’s antivirus) from accidentally deleting files in the cache.
 
 ### For Shared Folder (read/write access)
 
