@@ -43,8 +43,8 @@ Pin-Priority: 990
 
 ```bash
 apt update
-apt install dpkg-dev linux-headers-generic linux-image-generic
-apt install zfs-dkms zfsutils-linux
+sudo apt install dpkg-dev linux-headers-generic linux-image-generic
+sudo apt install zfs-dkms zfsutils-linux
 ```
 
 You should now have ZFS ready to roll.
@@ -59,7 +59,7 @@ You should now have ZFS ready to roll.
 - Good balance of speed and safety for read-heavy cache workloads
 
 ```bash
-zpool create lancache raidz1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1
+sudo zpool create lancache raidz1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1
 ```
 
 ### 🔹 Shared Folder Pool
@@ -79,9 +79,9 @@ Once the pools are created, adjust ownership and permissions:
 ### For LANCache (read-only for everyone else)
 
 ```bash
-zfs create lancache/data
-chown root:root /lancache/data
-chmod 555 /lancache/data  # Read and execute only
+sudo zfs create lancache/data
+sudo chown root:root /lancache/data
+sudo chmod 555 /lancache/data  # Read and execute only
 ```
 
 This prevents anything (like someone’s antivirus) from accidentally deleting files in the cache.
@@ -89,9 +89,9 @@ This prevents anything (like someone’s antivirus) from accidentally deleting f
 ### For Shared Folder (read/write access)
 
 ```bash
-zfs create shared/public
-chown nobody:nogroup /shared/public
-chmod 777 /shared/public  # Full access for anyone on the LAN
+sudo zfs create shared/public
+sudo chown nobody:nogroup /shared/public
+sudo chmod 777 /shared/public  # Full access for anyone on the LAN
 ```
 
 This way people can drop games, patches, or whatever into the share freely.
