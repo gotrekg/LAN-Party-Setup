@@ -48,7 +48,7 @@ In this guide, we’ll set up Samba on our Lancache server so users can access t
 
 ---
 
-## 🔑 Create Samba User (Optional)
+## 🔑 Create Samba User
 
 You can either allow guest access (as done above) or create a user for Samba access.
 
