@@ -4,16 +4,17 @@ Here's the lowdown on the little box doing all the heavy lifting for our LAN par
 
 ## 💾 Hardware
 
-- **Model**: Dell OptiPlex 7050 Micro
-- **CPU**: Intel Core i7-6700T (4 cores / 8 threads)
-- **RAM**: 32GB DDR4 @ 3200MHz (probably overkill, but hey, why not)
+- **Model**: Dell OptiPlex 5080 Tower
+- **CPU**: Intel Core i7-10700 (8 cores / 16 threads)
+- **RAM**: 32GB DDR4 @ 2666MHz
 - **Storage**:
-  - 250GB SSD for the OS (boots fast, does its job)
-  - 512GB SSD for sharing random files with folks
-  - 1TB NVMe SSD to cache all the games and also hold install files  
+  - 512GB NVMe SSD for the OS (boots fast, does its job)
+  - PCIe to Dual M.2 NVMe Adapter with 2x 1TB NVMe SSDs for caching all the games and holding install files  
     > 🏴‍☠️ *Yes, including offline/piratey games. Not promoting piracy, just being real — no one's buying full AAA games for one weekend of fragging.*
 
-- **Network**: 1x Gigabit Ethernet — it’s fast enough for our LAN needs
+- **Network**: 
+  - 1x Gigabit Ethernet — fallback or for basic LAN needs
+  - **10G Double Port Ethernet Card (Intel X540-T2)** — for high-speed LAN performance and ensuring smooth game downloads
 
 ## 🖥️ Operating System
 

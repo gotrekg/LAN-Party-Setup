@@ -18,40 +18,60 @@ Once Debian is installed and you're in the system, here's what I usually do. You
 
 ## Network Manager Setup
 
-I switched from the classic `/etc/network/interfaces` setup to using NetworkManager for managing network interfaces. This makes it easier if you want to use GUI tools or nmcli later.
+I switched from the classic `/etc/network/interfaces` setup to using **NetworkManager** for managing network interfaces. This makes it easier if you want to use GUI tools or `nmcli` later.
 
-```bash
-# Install NetworkManager
-sudo apt-get install network-manager
+### Steps:
 
-# Back up the old interfaces file in case you need it
-sudo cp /etc/network/interfaces /etc/network/interfaces.bak
+1. **Install NetworkManager**
+   ```bash
+   sudo apt-get install network-manager
+   ```
 
-# Edit the interfaces file and leave only loopback
-sudo nano /etc/network/interfaces
-# Leave only:
-# auto lo
-# iface lo inet loopback
+2. **Back up the old interfaces file in case you need it**
+   ```bash
+   sudo cp /etc/network/interfaces /etc/network/interfaces.bak
+   ```
 
-# Tell NetworkManager to manage interfaces previously handled by ifupdown
-sudo nano /etc/NetworkManager/NetworkManager.conf
-# Change:
-# [ifupdown]
-# managed=false
-# to:
-# [ifupdown]
-# managed=true
+3. **Edit the interfaces file and leave only loopback**
+   ```bash
+   sudo nano /etc/network/interfaces
+   ```
+   Leave only:
+   ```
+   auto lo
+   iface lo inet loopback
+   ```
 
-# Restart NetworkManager to apply changes
-sudo service NetworkManager restart
+4. **Tell NetworkManager to manage interfaces previously handled by ifupdown**
+   ```bash
+   sudo nano /etc/NetworkManager/NetworkManager.conf
+   ```
+   Change:
+   ```
+   [ifupdown]
+   managed=false
+   ```
+   to:
+   ```
+   [ifupdown]
+   managed=true
+   ```
 
-# Verify that NetworkManager is running and managing devices
-nmcli device status
+5. **Restart NetworkManager to apply changes**
+   ```bash
+   sudo service NetworkManager restart
+   ```
 
-# Disable the old networking service to avoid conflicts
-sudo systemctl stop networking
-sudo systemctl disable networking
-```
+6. **Verify that NetworkManager is running and managing devices**
+   ```bash
+   nmcli device status
+   ```
+
+7. **Disable the old networking service to avoid conflicts**
+   ```bash
+   sudo systemctl stop networking
+   sudo systemctl disable networking
+   ```
 
 *# Note for newcomers: If at any point your network goes down and you lose SSH, you can revert by restoring the backup file:*
 ```bash
