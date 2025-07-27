@@ -13,7 +13,7 @@ Once Debian is installed and you're in the system, here's what I usually do. You
   *# Editing sudoers can break sudo if done incorrectly. Always use `sudo visudo` to prevent syntax errors.*
 - Run a full update & upgrade  
   ```bash
-  apt update && apt upgrade -y
+  sudo apt update && sudo apt upgrade -y
   ```
   *# Watch out for any errors — if packages fail to install, fix those before moving on.*
 
@@ -68,6 +68,12 @@ Since I’ll be installing Cockpit and creating VMs, I’ll also set up a bridge
 
 6. **Create a bridge for VM networking**  
    Replace `enp1s0` with your actual onboard NIC name (check with `ip a` or `nmcli device status`).
+
+> **⚠️ IMPORTANT:**  
+> Creating the bridge will likely change your host's IP address!  
+> Make sure to check your new IP with `ip a` or `nmcli device status` after setting up the bridge.  
+> If you are connected via SSH, you may lose your connection and need to reconnect using the new IP.
+
    ```bash
    nmcli connection add type bridge autoconnect yes con-name br0 ifname br0
    nmcli connection add type bridge-slave autoconnect yes con-name br0-port1 ifname enp1s0 master br0
@@ -95,3 +101,32 @@ sudo systemctl enable networking
 sudo service networking start
 sudo service NetworkManager stop
 ```
+
+---
+
+## Cockpit & Virtual Machine Manager
+
+Cockpit is a web-based admin interface for servers. You can use it to manage your system and virtual machines.
+
+> **Tip:**  
+> For the most up-to-date installation instructions, visit the official Cockpit website:  
+> [https://cockpit-project.org/running.html#debian](https://cockpit-project.org/running.html#debian)
+
+As of now, the installation process on Debian is:
+
+```bash
+. /etc/os-release
+echo "deb http://deb.debian.org/debian ${VERSION_CODENAME}-backports main" | sudo tee /etc/apt/sources.list.d/backports.list
+sudo apt update
+sudo apt install -t ${VERSION_CODENAME}-backports cockpit
+```
+
+- Cockpit will be enabled by default after installation.
+- To manage virtual machines, also install:
+  ```bash
+  sudo apt install cockpit-machines
+  ```
+- Access Cockpit in your browser at:  
+  `https://<your-server-ip>:9090`
+
+Log in with your system user credentials.
