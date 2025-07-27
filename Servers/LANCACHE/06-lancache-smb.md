@@ -67,7 +67,7 @@ sudo chown -R nobody:nogroup /lancache/shared
    path = /lancache/instalacky
    browseable = yes
    writable = yes
-   valid users = masarik
+   valid users = masarik lan
    guest ok = no
    create mask = 0755
    directory mask = 0755
