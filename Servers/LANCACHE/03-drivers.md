@@ -1,18 +1,22 @@
 # 03 - Disk Prep & ZFS Layout
 
-For this build, I’ve got a total of **5 NVMe drives** — one in the motherboard slot (used for boot), and four more connected via PCIe adapters. Plus, I’ve got **2 SATA SSDs** for shared files.
+For this build, the system has been updated with **3 NVMe drives** and **2 SATA SSDs**. Here's the new layout:
 
 ## 💾 Drive Overview
 
-- **nvme0n1** — Boot drive (Debian OS)
-- **nvme1n1, nvme2n1, nvme3n1, nvme4n1** — Available for LANCache storage
+- **nvme2n1** — Boot drive (Debian OS)  
+- **nvme0n1, nvme1n1** — Available for LANCache storage (RAID 0 for performance)
 - **sda, sdb** — Available for shared user folder (drop-in games, files, etc.)
+
+---
 
 ## 🧰 Installing ZFS (Bookworm Backports)
 
 Debian includes ZFS in the contrib repo, but for newer versions it’s better to use the **backports**. Here's how to set it up properly:
 
 ### 1. Add the backports repo
+
+Create a new file for the backports repository:
 
 ```bash
 sudo nano /etc/apt/sources.list.d/bookworm-backports.list
@@ -42,7 +46,7 @@ Pin-Priority: 990
 ### 3. Install ZFS
 
 ```bash
-apt update
+sudo apt update
 sudo apt install dpkg-dev linux-headers-generic linux-image-generic
 sudo apt install zfs-dkms zfsutils-linux
 ```
@@ -53,13 +57,12 @@ You should now have ZFS ready to roll.
 
 ### 🔹 LANCache Pool
 
-**Drives**: `nvme1n1`, `nvme2n1`, `nvme3n1`, `nvme4n1`  
-**Layout**: **RAIDZ1**  
-- One drive worth of redundancy
-- Good balance of speed and safety for read-heavy cache workloads
+**Drives**: `nvme0n1`, `nvme1n1`  
+**Layout**: **RAID 0**  
+- RAID 0 for performance
 
 ```bash
-sudo zpool create lancache raidz1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1 /dev/nvme4n1
+sudo zpool create lancache raidz /dev/nvme0n1 /dev/nvme1n1
 ```
 
 ### 🔹 Shared Folder Pool

@@ -2,6 +2,9 @@
 
 Once Debian is installed and you're in the system, here's what I usually do. You can go way deeper with security and tweaks if you want — like setting up SSH keys, disabling root login, etc. I’m not doing all that here.
 
+> **Note:**  
+> For this step, I am using the onboard 1G NIC for setup and networking. LACP (for the 10G NIC) will be covered in a separate guide.
+
 ## 🔧 My Quick Setup
 
 - Change the root/user password to something solid  
@@ -16,9 +19,10 @@ Once Debian is installed and you're in the system, here's what I usually do. You
 
 ---
 
-## Network Manager Setup
+## Network Manager & Bridge Setup
 
-I switched from the classic `/etc/network/interfaces` setup to using **NetworkManager** for managing network interfaces. This makes it easier if you want to use GUI tools or `nmcli` later.
+I switched from the classic `/etc/network/interfaces` setup to using **NetworkManager** for managing network interfaces. This makes it easier if you want to use GUI tools or `nmcli` later.  
+Since I’ll be installing Cockpit and creating VMs, I’ll also set up a bridge interface for VM networking.
 
 ### Steps:
 
@@ -57,23 +61,34 @@ I switched from the classic `/etc/network/interfaces` setup to using **NetworkMa
    managed=true
    ```
 
-5. **Restart NetworkManager to apply changes**
+5. **Restart NetworkManager**
    ```bash
-   sudo service NetworkManager restart
+   sudo systemctl restart NetworkManager
    ```
 
-6. **Verify that NetworkManager is running and managing devices**
+6. **Create a bridge for VM networking**  
+   Replace `enp1s0` with your actual onboard NIC name (check with `ip a` or `nmcli device status`).
+   ```bash
+   nmcli connection add type bridge autoconnect yes con-name br0 ifname br0
+   nmcli connection add type bridge-slave autoconnect yes con-name br0-port1 ifname enp1s0 master br0
+   nmcli connection modify br0 ipv4.method auto
+   nmcli connection up br0
+   ```
+
+7. **Verify bridge and network status**
    ```bash
    nmcli device status
    ```
 
-7. **Disable the old networking service to avoid conflicts**
+8. **Disable the old networking service to avoid conflicts**
    ```bash
    sudo systemctl stop networking
    sudo systemctl disable networking
    ```
 
-*# Note for newcomers: If at any point your network goes down and you lose SSH, you can revert by restoring the backup file:*
+---
+
+*# Note: If your network goes down and you lose SSH, you can revert by restoring the backup file:*
 ```bash
 sudo cp /etc/network/interfaces.bak /etc/network/interfaces
 sudo systemctl enable networking
