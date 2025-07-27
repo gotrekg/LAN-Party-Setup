@@ -34,7 +34,7 @@ sudo nano .env
 ```
 USE_GENERIC_CACHE=true        # Use monolithic generic cache
 LANCACHE_IP=192.168.222.229   # This is the IP of the server itself
-DNS_BIND_IP=192.168.222.229   # DNS service bind IP on the host
+DNS_BIND_IP=192.168.222.229   # This is the IP of the server itself
 UPSTREAM_DNS=192.168.222.1     # OpenWRT router IP for upstream DNS
 CACHE_ROOT=/lancache/data      # Path to ZFS cache dataset
 CACHE_DISK_SIZE=900g           # Max cache size (based on ZFS pool)
@@ -71,7 +71,7 @@ Then confirm it's running with:
 sudo docker ps
 ```
 
-You should see `lancache`, `lancache-dns`, and `sniproxy` up and running.
+You should see `lancache-monolithic-1`, `lancache-dns-1` up and running.
 
 ## 🌐 Configure DHCP DNS in OpenWRT
 
@@ -79,25 +79,31 @@ To ensure all LAN devices use the cache, the OpenWRT router is configured to pus
 
 For the exact steps, see:  
 [`INFRA/Routers/OpenWRT/04-dhcp-dns-change.md`](../../INFRA/Routers/OpenWRT/04-dhcp-dns-change.md)
-
----
-
 ## 🔍 DNS Check on Host (Optional but Useful)
 
 Make sure your server itself uses the correct upstream DNS (i.e. your OpenWRT router) and not itself.
 
-### Setup static dns :
+### Set static DNS with NetworkManager (Debian 12):
+
+Find your active connection name:
 
 ```bash
-nano /etc/network/interfaces
+nmcli connection show
 ```
 
-add 
+> In my case, the connection name is `br0` because I created a bridge for a VM. Yours may be different—look for the one marked as "activated". If you set up a bridge for virtualization, it might be named `br0` or similar; otherwise, it could be something like `eth0` or `enpXsY`.
 
+Set the DNS server for your connection (replace `YOUR-CONNECTION` with the actual name):
+
+```bash
+sudo nmcli connection modify "YOUR-CONNECTION" ipv4.dns "192.168.222.1"
+sudo nmcli connection modify "YOUR-CONNECTION" ipv4.ignore-auto-dns yes
+sudo nmcli connection up "YOUR-CONNECTION"
 ```
-iface eth0 inet dhcp
-    dns-nameservers 192.168.1.1
-```
+
+This will ensure your server uses the OpenWRT router for DNS resolution.
+
+**Note:** Replace `192.168.222.1` with your actual router IP if your network uses a different subnet.
 
 Then you're good — that’s your OpenWRT router.
 
