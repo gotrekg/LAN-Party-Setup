@@ -130,7 +130,7 @@ sudo chown -R nobody:nogroup /lancache/shared
    directory mask = 0777
    ```
 
-   - `instalacky`: Both `masarik` and `lan` can read/write.
+   - `instalacky`: Only `masarik` can read/write; and `lan` can read.
    - `shared`: Both `masarik` and `lan` can read/write.
 
    > Adjust the `valid users` and permissions as needed for your environment.
