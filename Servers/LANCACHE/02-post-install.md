@@ -70,8 +70,8 @@ Since I’ll be installing Cockpit and creating VMs, I’ll also set up a bridge
    Replace `enp1s0` with your actual onboard NIC name (check with `ip a` or `nmcli device status`).
 
 > **⚠️ IMPORTANT:**  
-> Creating the bridge will likely change your host's IP address!  
-> Make sure to check your new IP with `ip a` or `nmcli device status` after setting up the bridge.  
+> Creating the bridge will likely change your host's IP address, but the new IP will only take effect after a restart!  
+> Make sure to check your new IP with `ip a` or `nmcli device status` after rebooting.  
 > If you are connected via SSH, you may lose your connection and need to reconnect using the new IP.
 
    ```bash
@@ -81,12 +81,17 @@ Since I’ll be installing Cockpit and creating VMs, I’ll also set up a bridge
    nmcli connection up br0
    ```
 
-7. **Verify bridge and network status**
+7. **Reboot to apply bridge changes and get your new IP**
+   ```bash
+   sudo reboot
+   ```
+
+8. **Verify bridge and network status (after reboot)**
    ```bash
    nmcli device status
    ```
 
-8. **Disable the old networking service to avoid conflicts**
+9. **Disable the old networking service to avoid conflicts**
    ```bash
    sudo systemctl stop networking
    sudo systemctl disable networking
@@ -107,6 +112,11 @@ sudo service NetworkManager stop
 ## Cockpit & Virtual Machine Manager
 
 Cockpit is a web-based admin interface for servers. You can use it to manage your system and virtual machines.
+
+> **Why Cockpit and Virtual Machines?**  
+> This server will act as both the LANCache and a central info page for users.  
+> I want the info page to be hosted on a separate VM, so users can simply visit `info.lan` instead of having to remember a port number like `lancache.lan:8080`.  
+> This makes it much easier for everyone at the LAN party to access important info, rules, and downloads.
 
 > **Tip:**  
 > For the most up-to-date installation instructions, visit the official Cockpit website:  
