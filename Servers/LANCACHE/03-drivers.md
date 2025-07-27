@@ -118,7 +118,7 @@ sudo wipefs -a /dev/sdb
 - RAID 0 for performance
 
 ```bash
-sudo zpool create lancache raidz /dev/nvme1n1 /dev/nvme2n1
+sudo zpool create lancache raidz0 /dev/nvme1n1 /dev/nvme2n1
 ```
 
 ### 🔹 Shared Folder Pool
