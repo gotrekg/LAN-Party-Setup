@@ -140,7 +140,7 @@ Once the pools are created, adjust ownership and permissions:
 ```bash
 sudo zfs create lancache/data
 sudo chown root:root /lancache/data
-sudo chmod 555 /lancache/data  # Read and execute only
+sudo chmod 755 /lancache/data  # Read and execute only
 ```
 
 This prevents anything (like someone’s antivirus) from accidentally deleting files in the cache.
