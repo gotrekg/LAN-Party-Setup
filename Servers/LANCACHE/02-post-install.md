@@ -67,19 +67,22 @@ Since I’ll be installing Cockpit and creating VMs, I’ll also set up a bridge
    ```
 
 6. **Create a bridge for VM networking**  
-   Replace `enp1s0` with your actual onboard NIC name (check with `ip a` or `nmcli device status`).
-
-> **⚠️ IMPORTANT:**  
-> Creating the bridge will likely change your host's IP address 
-> Make sure to check your new IP with `ip a` or `nmcli device status`
-> If you are connected via SSH, you may lose your connection and need to reconnect using the new IP.
+   > **Note:**  
+   > Replace `<your-nic-name>` with your actual onboard NIC name.  
+   > Find your NIC name using `ip a` or `nmcli device status`.  
+   > Common names include `eth0`, `ens33`, `enp3s0`, etc.
 
    ```bash
    sudo nmcli connection add type bridge autoconnect yes con-name br0 ifname br0
-   sudo nmcli connection add type bridge-slave autoconnect yes con-name br0-port1 ifname enp1s0 master br0
+   sudo nmcli connection add type bridge-slave autoconnect yes con-name br0-port1 ifname <your-nic-name> master br0
    sudo nmcli connection modify br0 ipv4.method auto
    sudo nmcli connection up br0
    ```
+
+> **⚠️ IMPORTANT:**  
+> The bridge setup will only fully apply after you reboot.  
+> Your host's IP address may change after rebooting, so check your new IP with `ip a` or `nmcli device status`.  
+> If you are connected via SSH, you may lose your connection and need to reconnect using the new IP.
 
 7. **Reboot to apply bridge changes and get your new IP**
    ```bash

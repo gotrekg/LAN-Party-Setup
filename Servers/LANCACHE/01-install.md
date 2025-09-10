@@ -11,7 +11,10 @@ This part is just the usual install routine. Nothing fancy or custom yet — jus
 
 ## ✅ Notes
 
+> **⚠️ Multi NIC Setup:**  
+> If your system has more than one network interface card (NIC), please read [10-multinic.md](10-multinic.md) **before proceeding further**.
+
 - Nothing special needs to be configured at this point
 - Just make sure the system boots, connects to the network, and installs successfully
-- For the installation, i have used the onboard NIC. The 10G NIC will be configured later with LACP.
-- We’ll do the fun setup stuff in the next steps
+- **For this guide, I will be using only the onboard NIC.**
+
