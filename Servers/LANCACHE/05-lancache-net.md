@@ -81,9 +81,17 @@ For the exact steps, see:
 [`INFRA/Routers/OpenWRT/04-dhcp-dns-change.md`](../../INFRA/Routers/OpenWRT/04-dhcp-dns-change.md)
 ## 🔍 DNS Check on Host (Optional but Useful)
 
-Make sure your server itself uses the correct upstream DNS (i.e. your OpenWRT router) and not itself.
+Make sure your server uses the correct upstream DNS (your OpenWRT router) and **not itself**.
 
-### Set static DNS with NetworkManager (Debian 12):
+### Set Static DNS with NetworkManager (Debian 12)
+
+First, ensure your server has a **static DHCP reservation** on your router.  
+This guarantees the server always gets the same IP address, so your `.env` config stays valid.
+
+> **How:**  
+> On OpenWRT, go to **Network > DHCP and DNS > Static Leases** and add a reservation for your server’s MAC address.
+
+---
 
 Find your active connection name:
 
@@ -91,19 +99,21 @@ Find your active connection name:
 nmcli connection show
 ```
 
-> In my case, the connection name is `br0` because I created a bridge for a VM. Yours may be different—look for the one marked as "activated". If you set up a bridge for virtualization, it might be named `br0` or similar; otherwise, it could be something like `eth0` or `enpXsY`.
+> Example: If you created a bridge for virtualization, it might be `br0`. Otherwise, look for names like `eth0` or `enpXsY` marked as "activated".
 
 Set the DNS server for your connection (replace `YOUR-CONNECTION` with the actual name):
 
 ```bash
-sudo nmcli connection modify "YOUR-CONNECTION" ipv4.dns "192.168.222.1"
-sudo nmcli connection modify "YOUR-CONNECTION" ipv4.ignore-auto-dns yes
-sudo nmcli connection up "YOUR-CONNECTION"
+sudo nmcli connection modify YOUR-CONNECTION ipv4.dns 192.168.222.1
+sudo nmcli connection modify YOUR-CONNECTION ipv4.ignore-auto-dns yes
+sudo nmcli connection up YOUR-CONNECTION
 ```
 
-This will ensure your server uses the OpenWRT router for DNS resolution.
+This ensures your server uses the OpenWRT router for DNS resolution.
 
 **Note:** Replace `192.168.222.1` with your actual router IP if your network uses a different subnet.
 
-Then you're good — that’s your OpenWRT router.
+---
+
+Once done, your server will use the OpenWRT router for DNS, and its IP will remain consistent thanks to the DHCP
 
