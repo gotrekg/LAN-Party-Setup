@@ -116,10 +116,10 @@ sudo service NetworkManager stop
 
 Cockpit is a web-based admin interface for servers. You can use it to manage your system and virtual machines.
 
-> **Why Cockpit and Virtual Machines?**  
-> This server will act as both the LANCache and a central info page for users.  
-> I want the info page to be hosted on a separate VM, so users can simply visit `info.lan` instead of having to remember a port number like `lancache.lan:8080`.  
-> This makes it much easier for everyone at the LAN party to access important info, rules, and downloads.
+**Why Cockpit and Virtual Machines?**  
+This server will act as both the LANCache and a central info page for users.  
+I want the info page to be hosted on a separate VM, so users can simply visit `info.lan` instead of having to remember a port number like `lancache.lan:8080`.  
+This makes it much easier for everyone at the LAN party to access important info, rules, and downloads.
 
 > **Tip:**  
 > For the most up-to-date installation instructions, visit the official Cockpit website:  
