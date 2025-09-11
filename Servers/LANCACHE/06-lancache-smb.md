@@ -44,8 +44,8 @@ sudo mkdir -p /lancache/shared
 sudo chmod -R 755 /lancache/instalacky
 sudo chown -R root:masarik /lancache/instalacky
 
-sudo chmod -R 777 /lancache/shared
-sudo chown -R nobody:nogroup /lancache/shared
+sudo chmod -R 777 /shared/public
+sudo chown -R nobody:nogroup /shared/public
 ```
 
 - `instalacky`: Only `root` and `masarik` can write/paste files; others have read and execute access.
