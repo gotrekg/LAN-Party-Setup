@@ -121,7 +121,7 @@ sudo chown -R nobody:nogroup /shared/public
    directory mask = 0755
 
    [shared]
-   path = /lancache/shared
+   path = /shared/public
    browseable = yes
    writable = yes
    valid users = masarik lan
