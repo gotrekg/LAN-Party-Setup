@@ -73,7 +73,7 @@ sudo chown -R nobody:nogroup /shared/public
    directory mask = 0755
 
    [shared]
-   path = /lancache/shared
+   path = /shared/public
    browseable = yes
    writable = yes
    guest ok = yes
@@ -106,34 +106,6 @@ sudo chown -R nobody:nogroup /shared/public
    
    ---
 
-   **Example Samba Configuration (single config for both shares):**
-
-   Append the following to your `/etc/samba/smb.conf`:
-
-   ```ini
-   [instalacky]
-   path = /lancache/instalacky
-   browseable = yes
-   writable = yes
-   valid users = masarik lan
-   guest ok = no
-   create mask = 0755
-   directory mask = 0755
-
-   [shared]
-   path = /shared/public
-   browseable = yes
-   writable = yes
-   valid users = masarik lan
-   guest ok = no
-   create mask = 0777
-   directory mask = 0777
-   ```
-
-   - `instalacky`: Only `masarik` can read/write; and `lan` can read.
-   - `shared`: Both `masarik` and `lan` can read/write.
-
-   > Adjust the `valid users` and permissions as needed for your environment.
 2. **Set Samba passwords for your account :**
    ```bash
    
